@@ -11,8 +11,8 @@ export class ProductsService {
 
   getAllProducts():Observable<Product[]>{
     //variable host declarer dans environment.ts
-    let host=(Math.random()>0.1)?environment.host:environment.unreachableHost;
-
+    //let host=(Math.random()>0.2)?environment.host:environment.unreachableHost;
+    let host=environment.host;
   //return this.http.get("http://localhost:3000/products");
     return this.http.get<Product[]>(host+"/products");
   }
@@ -27,4 +27,27 @@ export class ProductsService {
     let host=environment.host;
     return this.http.get<Product[]>(host+"/products?available=true");
   }
+
+  SearchProducts(keyword:string):Observable<Product[]>{
+    let host=environment.host;
+    return this.http.get<Product[]>(host+"/products?name_like="+keyword);
+  }
+  Select(product:Product):Observable<Product>{
+    let host=environment.host;
+    product.selected=!product.selected;
+    return this.http.put<Product>(host+"/products/"+product.id,product);
+  }
+
+  deleteProduct(product:Product):Observable<void>{
+    let host=environment.host;
+    product.selected=!product.selected;
+    return this.http.delete<void>(host+"/products/"+product.id);
+  }
+
+  Save(product:Product):Observable<Product>{
+    let host=environment.host;
+    return this.http.post<Product>(host+"/products",product);
+  }
+
+
 }
